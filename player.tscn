@@ -1,0 +1,63 @@
+[gd_scene load_steps=10 format=3 uid="uid://bs40ot1du8so1"]
+
+[ext_resource type="Script" path="res://player.gd" id="1_vsxml"]
+[ext_resource type="Script" path="res://Camera3D.gd" id="2_iie4r"]
+[ext_resource type="Script" path="res://climb.gd" id="3_bjvyg"]
+[ext_resource type="Script" path="res://AnimationPlayer.gd" id="4_twjo3"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_bxe18"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_fo0ak"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_at6vx"]
+size = Vector3(0.75, 0.931519, 0.700683)
+
+[sub_resource type="Animation" id="Animation_f3glr"]
+resource_name = "climb"
+length = 0.8
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_v77oq"]
+_data = {
+"climb": SubResource("Animation_f3glr")
+}
+
+[node name="CharacterBody3D" type="CharacterBody3D"]
+script = ExtResource("1_vsxml")
+metadata/player = true
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("CapsuleShape3D_bxe18")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("CapsuleMesh_fo0ak")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+fov = 90.0
+script = ExtResource("2_iie4r")
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("3_bjvyg")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00823975, -0.0342407, -0.305237)
+shape = SubResource("BoxShape3D_at6vx")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_v77oq")
+}
+script = ExtResource("4_twjo3")
